@@ -15,7 +15,7 @@ int main(){
     printf("\n");
     printf("%s",findByIndex(array,0));
     for(;;) {
-        fgets(command, 100, stdin);
+        fgets(command, 20, stdin);
         int size = strlen(command);
         command[size] = '\n';
         command[size + 1] = '\0';

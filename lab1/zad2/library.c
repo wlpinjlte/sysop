@@ -25,7 +25,7 @@ void wcFunction(struct Array array,char *name_of_file){
     strcat(command,name_of_file);
     strcat(command," > ");
     strcat(command,filePath);
-    printf("%s",command);
+//    printf("%s",command);
     system(command);
 
     FILE *file=fopen(filePath,"r");
@@ -38,7 +38,7 @@ void wcFunction(struct Array array,char *name_of_file){
     size = ftell(file); // get current file pointer
     fseek(file, 0, SEEK_SET); // seek back to beginning of file
     // proceed with allocating memory and reading the file
-    array.blocksArray[*array.curr_index]=malloc((size+1)*sizeof(char));
+    array.blocksArray[*array.curr_index]=calloc((size+1),sizeof(char));
     fread(array.blocksArray[*array.curr_index],sizeof(char),size,file);
 //    printf("\n");
 //    printf("%s",array.blocksArray[*array.curr_index]);
@@ -49,7 +49,9 @@ char *findByIndex(struct Array array,int index){
 }
 
 void freeBlock(struct Array array,int index){
-    free(array.blocksArray[index]);
+//    free(array.blocksArray[index]);
+    memmove(array.blocksArray[index],array.blocksArray[index+1],sizeof(char*)*(*array.size_of_array-index-1));
+    *array.curr_index-=1;
 }
 
 void freeArray(struct Array array){
