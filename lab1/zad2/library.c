@@ -40,7 +40,6 @@ void wcFunction(struct Array array,char *name_of_file){
     // proceed with allocating memory and reading the file
     array.blocksArray[*array.curr_index]=malloc((size+1)*sizeof(char));
     fread(array.blocksArray[*array.curr_index],sizeof(char),size,file);
-    fclose(file);
 //    printf("\n");
 //    printf("%s",array.blocksArray[*array.curr_index]);
 }
