@@ -15,17 +15,16 @@ void wcFunction(struct Array array,char *name_of_file){
     char *command=calloc(SIZE,sizeof(char));
     char filePath[]="./tmp/temp.txt";
     *array.curr_index+=1;
-    printf("%d",*array.curr_index);
+//    printf("%d",*array.curr_index);
     int i=0;
     for(;i<SIZE;i++){
         command[i]=0;
     }
-
     strcpy(command,"wc ");
     strcat(command,name_of_file);
     strcat(command," > ");
     strcat(command,filePath);
-//    printf("%s",command);
+//    printf("%s\n",command);
     system(command);
 
     FILE *file=fopen(filePath,"r");
