@@ -1,21 +1,59 @@
-CC = gcc -Wall -std=c11 -ggdb
+CC = gcc -Wall
+LIB=library
+MAIN=main.c
+MAINDLL=main.c dllmanager.h
 
-
-all: static shared clean
-
-static:
+all:
+	make lib_static
+	make lib_shared
+	make main_static
+	make main_shared
+	make main_dlopen
+	make test
 	make clean
-	$(CC) -c mylib.c
-	ar crs libmylib.a mylib.o
-	$(CC) main.c -o main -L. -lmylib
+test:
+	sudo ls > /dev/null
+	sudo mv library.so /usr/lib
+	make create_test
+	./main_static<test.in>result_static.txt
+	./main_shared<test.in>result_shared.txt
+	./main_dlopen<test.in>result_dynamic.txt
+	rm -f test.in
+create_test:
+	echo "init 20">test.in
+	(ls -p | grep -v / | sed 's/^/count /')>>test.in
+	echo "show 0">>test.in
+	echo "show 1">>test.in
+	echo "show 2">>test.in
+	echo "show 3">>test.in
+	echo "show 4">>test.in
+	echo "show 5">>test.in
+	echo "delete 5">>test.in
+	echo "delete 4">>test.in
+	echo "delete 3">>test.in
+	echo "delete 2">>test.in
+	echo "delete 1">>test.in
+	echo "delete 0">>test.in
+	echo "destroy ">>test.in
+	echo "exit ">>test.in
+	#expect -c "send \003;">>test.in
 
-shared:
-	make clean
-	$(CC) -fPIC -c mylib.c
-	$(CC) -shared -fPIC -o libmylib.so mylib.o
-	$(CC) main.c -o main -L. -lmylib -Wl,-rpath=`pwd`
+lib_static: $(LIB).c
+	$(CC) -c $(LIB).c
+	ar cr $(LIB).a $(LIB).o
+
+lib_shared: $(LIB).c
+	$(CC) -c -fPIC $(LIB).c
+	$(CC) -shared -o $(LIB).so $(LIB).o
+
+main_static: $(LIB).c $(MAINDLL)
+	$(CC) $(MAIN) -o main_static -L . $(LIB).a
+
+main_shared: $(LIB).c $(MAINDLL)
+	$(CC) $(MAIN) -o main_shared -L . $(LIB).so
+
+main_dlopen: $(LIB).c $(MAINDLL)
+	$(CC) $(MAIN) -o main_dlopen -ldl -D USE_DLL
 
 clean:
-	rm -f *.o
-	rm -f *.a
-	rm -f *.txt
+	rm -f *.o *.out *.a *.so

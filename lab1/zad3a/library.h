@@ -16,7 +16,7 @@ struct Array create(int size);
 void wcFunction(struct Array array,char *name_of_file);
 char *findByIndex(struct Array array,int index);
 void freeBlock(struct Array array,int index);
-void freeArray();
+void freeArray(struct Array array);
 
 
 #endif //ZAD1_LIBRARY_H

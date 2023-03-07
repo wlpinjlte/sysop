@@ -67,6 +67,7 @@ int main(){
 //    char *result=calloc(200,sizeof(char));
     clock_t timeStart,timeEnd;
     static struct tms tmsStart,tmsEnd;
+    int flag=1;
     for(;;) {
         printf(">>");
         timeStart=0;
@@ -102,23 +103,32 @@ int main(){
 //                    printf("%d\n",getInt(command));
                     printf("%s",findByIndex(array, getInt(command)));
                     break;
-                }else if(strcmp(result,"delete")==0){
+                }else if(strcmp(result,"delete")==0) {
                     freeBlock(array, getInt(command));
                     break;
-                }else if(strcmp(result,"destroy")==0){
+                }else if(strcmp(result,"destroy")){
                     freeArray(array);
-                    break;
-                }else{
+                }else if(strcmp(result,"exit")){
+                    flag=0;
+                }
+                else{
                     printf("Unknown command");
                     break;
                 }
             }
+//            if(i==size-1){
+//                printf("siema");
+//            }
         }
         free(result);
         free(command);
         timeEnd=times(&tmsEnd);
         writeResult(timeStart, timeEnd,
                     tmsStart, tmsEnd);
+
+        if(flag==0){
+            break;
+        }
 //        printf("%s", findByIndex(array,0));
     }
     return 0;
