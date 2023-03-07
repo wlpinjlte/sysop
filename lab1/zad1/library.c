@@ -15,7 +15,7 @@ void wcFunction(struct Array array,char *name_of_file){
     char *command=calloc(SIZE,sizeof(char));
     char filePath[]="./tmp/temp.txt";
     *array.curr_index+=1;
-    printf("%d",*array.curr_index);
+//    printf("%d",*array.curr_index);
     int i=0;
     for(;i<SIZE;i++){
         command[i]=0;
@@ -50,7 +50,8 @@ char *findByIndex(struct Array array,int index){
 }
 
 void freeBlock(struct Array array,int index){
-    free(array.blocksArray[index]);
+    memmove(&array.blocksArray[index],&array.blocksArray[index+1],sizeof(char*)*(*array.size_of_array-index-1));
+    *array.curr_index-=1;
 }
 
 void freeArray(struct Array array){

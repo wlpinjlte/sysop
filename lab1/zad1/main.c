@@ -8,19 +8,19 @@
 #include <ctype.h>
 #include <time.h>
 int main(){
-    char *command=malloc(10*sizeof(char));
+//    char *command=malloc(10*sizeof(char));
     struct Array array=create(10);
-    printf("\n");
+//    printf("\n");
     wcFunction(array,"main.c");
     printf("\n");
     printf("%s",findByIndex(array,0));
-    for(;;) {
-        fgets(command, 20, stdin);
-        int size = strlen(command);
-        command[size] = '\n';
-        command[size + 1] = '\0';
-        printf("%s", command);
-    }
+//    for(;;) {
+//        fgets(command, 10, stdin);
+//        int size = strlen(command);
+//        command[size] = '\n';
+//        command[size + 1] = '\0';
+//        printf("%s", command);
+//    }
     return 0;
 }
 
