@@ -81,7 +81,7 @@ int main(){
         int j=0;
 //        printf("%s", command);
         for(i=0;i<size;i++){
-            if(command[i]!=32){
+            if(command[i]!=32&&i!=size-1){
                 result[j]=command[i];
                 j+=1;
             }else{

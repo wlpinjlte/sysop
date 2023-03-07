@@ -82,55 +82,56 @@ int main(){
         int j=0;
 //        printf("%s", command);
         for(i=0;i<size;i++){
-            if(command[i]!=32){
+            if(command[i]!=32&&i!=size-1){
                 result[j]=command[i];
                 j+=1;
             }else{
-                result=realloc(result,j*sizeof(char));
-//                result[j]='\0';
-//                printf("rezultat: %s\n",result);
-                if(strcmp(result,"init")==0){
-//                    printf("%d", getInt(command));
-                    array=create(getInt(command));
-                    break;
-                }else if(strcmp(result,"count")==0){
-                    char *getfile=getFileName(command,j+1);
-//                    printf("%s", getfile);
-                    getfile[strlen(getfile)-1]='\0';
-                    wcFunction(array,getfile);
-                    break;
-                }else if(strcmp(result,"show")==0){
-//                    printf("%d\n",getInt(command));
-                    printf("%s",findByIndex(array, getInt(command)));
-                    break;
-                }else if(strcmp(result,"delete")==0) {
-                    freeBlock(array, getInt(command));
-                    break;
-                }else if(strcmp(result,"destroy")){
-                    freeArray(array);
-                }else if(strcmp(result,"exit")){
-                    flag=0;
-                }
-                else{
-                    printf("Unknown command");
-                    break;
+                    result=realloc(result,j*sizeof(char));
+                    //                result[j]='\0';
+//                    printf("rezultat: %s\n",result);
+                    if(strcmp(result,"init")==0){
+                        //                    printf("%d", getInt(command));
+                        array=create(getInt(command));
+                        break;
+                    }else if(strcmp(result,"count")==0){
+                        char *getfile=getFileName(command,j+1);
+                        //                    printf("%s", getfile);
+                        getfile[strlen(getfile)-1]='\0';
+                        wcFunction(array,getfile);
+                        break;
+                    }else if(strcmp(result,"show")==0){
+                        //                    printf("%d\n",getInt(command));
+                        printf("%s",findByIndex(array, getInt(command)));
+                        break;
+                    }else if(strcmp(result,"delete")==0) {
+                        freeBlock(array, getInt(command));
+                        break;
+                    }else if(strcmp(result,"destroy")==0){
+                        freeArray(array);
+                    }else if(strcmp(result,"exit")==0){
+                        flag=0;
+                    }
+                    else{
+                        printf("Unknown command");
+                        break;
+                    }
                 }
             }
 //            if(i==size-1){
 //                printf("siema");
 //            }
-        }
-        free(result);
-        free(command);
-        timeEnd=times(&tmsEnd);
-        writeResult(timeStart, timeEnd,
-                    tmsStart, tmsEnd);
+            free(result);
+            free(command);
+            timeEnd=times(&tmsEnd);
+            writeResult(timeStart, timeEnd,
+                        tmsStart, tmsEnd);
 
-        if(flag==0){
-            break;
+            if(flag==0){
+                break;
+            }
         }
+
 //        printf("%s", findByIndex(array,0));
+        return 0;
     }
-    return 0;
-}
 

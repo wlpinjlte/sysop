@@ -34,8 +34,8 @@ create_test:
 	echo "delete 2">>test.in
 	echo "delete 1">>test.in
 	echo "delete 0">>test.in
-	echo "destroy ">>test.in
-	echo "exit ">>test.in
+	echo "destroy">>test.in
+	echo "exit">>test.in
 	#expect -c "send \003;">>test.in
 
 lib_static: $(LIB).c
