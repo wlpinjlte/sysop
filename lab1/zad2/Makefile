@@ -9,7 +9,6 @@ all:
 	make main_static
 	make main_shared
 	make main_dlopen
-	make clean
 lib_static: $(LIB).c
 	$(CC) -c $(LIB).c
 	ar cr $(LIB).a $(LIB).o
@@ -28,4 +27,4 @@ main_dlopen: $(LIB).c $(MAINDLL)
 	$(CC) $(MAIN) -o main_dlopen -ldl -D USE_DLL
 
 clean:
-	rm -f *.o *.out *.a *.so
+	rm -f *.o *.out *.a *.so *.txt

@@ -49,7 +49,6 @@ report:
 	make test OPT="-O0"
 	make os
 	make test OPT="-Os"
-	make clean
 lib_static: $(LIB).c
 	$(CC) -c $(LIB).c
 	ar cr $(LIB).a $(LIB).o
@@ -68,4 +67,4 @@ main_dlopen: $(LIB).c $(MAINDLL)
 	$(CC) $(OPT) $(MAIN) -o main_dlopen -ldl -D USE_DLL
 
 clean:
-	rm -f *.o *.out *.a *.so
+	rm -f *.o *.out *.a *.so *.txt
