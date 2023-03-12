@@ -33,7 +33,7 @@ void zad1b(char **argv){
     fclose(wy);
 }
 int main(int argc,char **argv){
-    printf("%d",argc);
+//    printf("%d",argc);
     if(argc!=5){
         printf("zla ilosc argumentow");
         return 1;
