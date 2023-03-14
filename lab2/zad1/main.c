@@ -52,19 +52,16 @@ int main(int argc,char **argv){
         printf("zla ilosc argumentow\n");
         return 1;
     }
-    printf("przyklad 1a\n");
     timeStart=0;
     timeEnd=0;
     timeStart=times(&tmsStart);
+#ifndef SYS
     zad1a(argv);
-    timeEnd=times(&tmsEnd);
-    writeResult(timeStart, timeEnd,
-                tmsStart, tmsEnd);
-    printf("przyklad 1b\n");
-    timeStart=0;
-    timeEnd=0;
-    timeStart=times(&tmsStart);
+//    printf("std");
+#else
     zad1b(argv);
+//    printf("sys");
+#endif
     timeEnd=times(&tmsEnd);
     writeResult(timeStart, timeEnd,
                 tmsStart, tmsEnd);

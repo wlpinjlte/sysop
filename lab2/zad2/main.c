@@ -4,7 +4,9 @@
 #include <time.h>
 #include <sys/times.h>
 #include <unistd.h>
+#ifndef BLOCK_SIZE
 #define BLOCK_SIZE 1
+#endif
 void reverse(char* buffer,int size_of_buffer){
     int i=0;
     char tmp;
