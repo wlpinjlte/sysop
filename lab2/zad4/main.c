@@ -22,7 +22,7 @@ int main(int argc,char **argv){
     }
     char *directory=argv[1];
     if (ftw(directory, fn, 1) == -1) {
-        printf("ftw function don't work");
+        printf("ftw function don't work(not directory found)\n");
         return 2;
     }
     printf("Final size: %lld\n",full_size);

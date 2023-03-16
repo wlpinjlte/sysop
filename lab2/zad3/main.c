@@ -20,7 +20,7 @@ int main(int argc,char **argv){
     struct dirent* single_object;
     struct stat stats;
     long long full_size=0;
-    while(single_object=readdir(directory)){
+    while((single_object=readdir(directory))){
         stat(single_object->d_name,&stats);
         if (S_ISDIR(stats.st_mode))
             continue;
