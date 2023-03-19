@@ -4,10 +4,10 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <dirent.h>
-#include <stdlib.h>make 
+#include <stdlib.h>
 #include <string.h>
 #include <sys/wait.h>
-char exe_path[]="/home/waga/sysop/lab3/zad3/main";
+char exe_path[PATH_MAX];
 int main(int argc,char ** argv){
     if(argc!=3){
         printf("zla liczba argumentow");
@@ -22,7 +22,7 @@ int main(int argc,char ** argv){
     struct stat stats;
 
     char *destination_path;
-
+    realpath(argv[0],exe_path);
     while((single_object=readdir(directory))){
         if (strcmp(single_object->d_name, ".") == 0) continue;
         if (strcmp(single_object->d_name, "..") == 0) continue;
