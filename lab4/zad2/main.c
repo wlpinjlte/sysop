@@ -44,6 +44,7 @@ void test3(struct sigaction act){
     }else{
         wait(NULL);
     }
+    pause();
 }
 
 void test1(struct sigaction act){
@@ -68,24 +69,12 @@ void test1(struct sigaction act){
     }
     printf("\n");
     printf("Custom:\n");
-//    sigemptyset(&act.sa_mask);
-//    act.sa_sigaction=info;
-//    act.sa_flags=SA_SIGINFO;
-//    sigaction(SIGUSR1,&act,NULL);
-    fflush(stdout);
+
     sigval_t val={10};
     sigqueue(getpid(),SIGUSR1,val);
-//    kill(getpid(),SIGUSR1);
-//    sigemptyset(&act.sa_mask);
-//    act.sa_sigaction=info;
-//    act.sa_flags=SA_SIGINFO;
-//    sigaction(SIGUSR1,&act,NULL);
 }
 
 int main(){
-    sigval_t sig_val = {0xBADC0DE};
-    int temp=sigqueue(getpid(), SIGSTOP, sig_val);
-    printf("errno:%d\n",errno);
 //    printf("%d\n",temp);
     struct sigaction act;
     printf("test1: \n");
