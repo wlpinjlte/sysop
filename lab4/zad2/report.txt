@@ -1,0 +1,25 @@
+test1:
+self:
+singal: 10
+PID: 841
+exit value or signal: 0
+Number of attempted system call: 0
+Real user ID: 0
+
+child:
+singal: 10
+PID: 842
+exit value or signal: 0
+Number of attempted system call: 0
+Real user ID: 0
+
+Custom:
+singal: 10
+PID: 841
+exit value or signal: a
+Number of attempted system call: 10
+Real user ID: 0
+
+test2:
+test3:
+child terminated

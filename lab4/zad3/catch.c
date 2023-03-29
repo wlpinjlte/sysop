@@ -10,7 +10,7 @@ int status=0;
 int counter=0;
 
 void handler(int signo,siginfo_t* siginfo,void * context){
-    printf("pid:%d\n",siginfo->si_pid);
+    printf("sygnal przyszedl:%d\n",siginfo->si_pid);
     status=1;
     parameter=siginfo->si_status;
     kill(siginfo->si_pid,SIGUSR1);
@@ -18,8 +18,8 @@ void handler(int signo,siginfo_t* siginfo,void * context){
 }
 
 void printCounter(){
-    fflush(stdout);
-    printf("counter:%d",counter);
+//    fflush(stdout);
+    printf("counter:%d\n",counter);
 }
 
 void end(){
@@ -29,7 +29,7 @@ void end(){
 
 void for1to100(){
     for(int i=1;i<=100;i++){
-        fflush(stdout);
+//        fflush(stdout);
         printf("%d ",i);
     }
     printf("\n");
@@ -42,13 +42,13 @@ void printTime(){
 
     time ( &rawtime );
     timeinfo = localtime ( &rawtime );
-    fflush(stdout);
+//    fflush(stdout);
     printf ( "Current local time and date: %s", asctime (timeinfo) );
 }
 
 void printEverySecond(){
     while(parameter==4){
-        fflush(stdout);
+//        fflush(stdout);
         printTime();
         sleep(1);
     }
@@ -64,38 +64,44 @@ int main(){
     while(1){
         if(status==0)
             continue;
-        fflush(stdout);
         status=0;
         if(parameter==1){
-            printf("paramter1\n");
             if(fork()==0){
+//                printf("paramter1\n");
                 signal(SIGUSR1,SIG_IGN);
                 for1to100();
+                fflush(stdout);
             }
         }else if(parameter==2){
-            printf("parametr2\n");
             if(fork()==0){
+//                printf("parametr2\n");
+                signal(SIGUSR1,SIG_IGN);
                 printTime();
+                fflush(stdout);
                 exit(0);
             }
 
         }else if(parameter==3){
             fflush(stdout);
-            printf("parametr3\n");
-            fflush(stdout);
             if(fork()==0){
+//                printf("parametr3\n");
+                signal(SIGUSR1,SIG_IGN);
                 printCounter();
+                fflush(stdout);
                 exit(0);
             }
 
         }else if(parameter==4){
-            printf("parametr4\n");
+//            printf("parametr4\n");
             printEverySecond();
+            fflush(stdout);
         }else if(parameter==5){
-            printf("parametr5\n");
+//            printf("parametr5\n");
+            printf("end");
+            fflush(stdout);
             end();
         }
-        fflush(stdout);
+//        fflush(stdout);
 
     }
 
