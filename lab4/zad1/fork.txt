@@ -1,0 +1,18 @@
+ignore:
+pid:1753 signal rised
+pid:1754 signal rised
+
+handler:
+pid:1776 signal rised
+pid:1776 sygnal
+pid:1777 signal rised
+pid:1777 sygnal
+
+mask:
+pid:1872 signal rised
+pid:1873 signal rised
+
+pending:
+pid:1880 signal rised
+pid:1880 signal pending
+pid:1881 signal not pending

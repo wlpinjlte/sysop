@@ -31,9 +31,7 @@ void raise_function(){
 
 int function(char **argv){
     if(strcmp(argv[1],"ignore")==0){
-        if(strcmp(argv[2],"parent")==0){
-            signal(SIGUSR1,SIG_IGN);
-        }
+        signal(SIGUSR1,SIG_IGN);
         raise_function();
         return 1;
     }else if(strcmp(argv[1],"handler")==0){

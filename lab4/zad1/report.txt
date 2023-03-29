@@ -1,0 +1,5 @@
+a)Po wykonaniu funkcji fork proces potomny dziedziczy po swoim przodku wartości maski sygnałów i
+ustalenia dotyczące obsługi sygnałów.
+b)Nieobsłużone sygnały procesu macierzystego są czyszczone.
+c)Po wykonaniu funkcji exec maska obsługi sygnałów i nieobsłużone sygnały są takie same jak w procesie,
+w którym wywołano funkcję exec.
