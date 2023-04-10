@@ -16,8 +16,8 @@ double integral(double dx,int i,double long_of_reactagle){
     double result=0;
     double j=i*long_of_reactagle;
     double end=long_of_reactagle*(i+1);
-    double steps=long_of_reactagle/dx;
-    for(int g=0;g<steps-1;g++){
+    long steps=long_of_reactagle/dx;
+    for(long g=0;g<steps-1;g++){
         result+=f(j)*dx;
         j+=dx;
     }
@@ -25,10 +25,6 @@ double integral(double dx,int i,double long_of_reactagle){
 //    printf("%lf\n",result);
 //    printf("\n");
     return result;
-}
-
-double timeDifference(clock_t t1, clock_t t2){
-    return ((double)(t2 - t1) / CLOCKS_PER_SEC);
 }
 
 int main(int argc,char **argv){
@@ -66,8 +62,9 @@ int main(int argc,char **argv){
 //        printf("%s\n",c);
         result+=strtod(c,NULL);
     }
-    printf("dx:%.12f n:%d\n",dx,n_fork);
+    printf("dx:%s n:%d\n",argv[1],n_fork);
     printf("Result: %lf\n",result);
+
     time(&end);
     time_t elapsed = end - begin;
     printf("Time:%ld s\n", elapsed);
