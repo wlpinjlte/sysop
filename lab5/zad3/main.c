@@ -55,5 +55,6 @@ int main(int argc,char **argv){
     time_t elapsed = end - begin;
     printf("Time:%ld s\n", elapsed);
     printf("\n");
+    close(file);
     return 0;
 }
