@@ -12,9 +12,9 @@ void init(int serverId){
     buff->mtype=1;
     //strcpy(buff->mtext,"siema co tam\n");
     msgsnd(serverId,buff,sizeof(struct msgbuff),0);
-    msgrcv(queueID,buff,sizeof(struct msgbuff),-1,0);
-    //printf("siema");
-    fflush(stdout);
+    msgrcv(queueID,buff,sizeof(struct msgbuff),1,0);
+   /* printf("siema");
+    fflush(stdout);*/
     if(strcmp(buff->mtext,"full server")==0){
         printf("too many clients");
         exit(0);
@@ -29,9 +29,11 @@ void list(int serverId){
     buff->timeinfo= localtime(&time1);
     buff->clientKey=key;
     buff->mtype=2;
+    //printf("send\n");
+    //fflush(stdout);
     msgsnd(serverId,buff,sizeof(struct msgbuff),0);
     msgrcv(queueID,buff,sizeof(struct msgbuff),2,0);
-    printf("%s\n",buff->mtext);
+    //printf("%s\n",buff->mtext);
     fflush(stdout);
 }
 
@@ -56,7 +58,7 @@ void one(int serverId,int recipientId,char * message){
     buff->clientKey=key;
     buff->mtype=4;
     strcpy(buff->mtext,message);
-    buff->auxiliaryKey=recipientId;
+    buff->auxiliaryId=recipientId;
     msgsnd(serverId,buff,sizeof(struct msgbuff),0);
 }
 
