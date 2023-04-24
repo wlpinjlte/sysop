@@ -1,24 +1,25 @@
 #include "header.h"
+
 key_t key;
+
 int queueID;
+
 void init(int serverId){
     time_t time1;
     struct msgbuff *buff;
     buff=malloc(sizeof(struct msgbuff));
     time(&time1);
-    buff->timeinfo=localtime(&time1);
+    buff->timeinfo=*localtime(&time1);
     printf("%d\n",key);
     buff->clientKey=key;
     buff->mtype=1;
-    //strcpy(buff->mtext,"siema co tam\n");
     msgsnd(serverId,buff,sizeof(struct msgbuff),0);
     msgrcv(queueID,buff,sizeof(struct msgbuff),1,0);
-   /* printf("siema");
-    fflush(stdout);*/
     if(strcmp(buff->mtext,"full server")==0){
-        printf("too many clients");
+        printf("too many clients\n");
         exit(0);
     }
+    printf("id:%d\n",buff->auxiliaryId);
 }
 
 void list(int serverId){
@@ -26,14 +27,12 @@ void list(int serverId){
     struct msgbuff *buff;
     buff=malloc(sizeof(struct msgbuff));
     time(&time1);
-    buff->timeinfo= localtime(&time1);
+    buff->timeinfo= *localtime(&time1);
     buff->clientKey=key;
     buff->mtype=2;
-    //printf("send\n");
-    //fflush(stdout);
     msgsnd(serverId,buff,sizeof(struct msgbuff),0);
     msgrcv(queueID,buff,sizeof(struct msgbuff),2,0);
-    //printf("%s\n",buff->mtext);
+    printf("%s\n",buff->mtext);
     fflush(stdout);
 }
 
@@ -42,7 +41,7 @@ void all(int serverId,char *message){
     struct msgbuff *buff;
     buff=malloc(sizeof(struct msgbuff));
     time(&time1);
-    buff->timeinfo= localtime(&time1);
+    buff->timeinfo= *localtime(&time1);
     buff->clientKey=key;
     buff->mtype=3;
     strcpy(buff->mtext,message);
@@ -54,7 +53,7 @@ void one(int serverId,int recipientId,char * message){
     struct msgbuff *buff;
     buff=malloc(sizeof(struct msgbuff));
     time(&time1);
-    buff->timeinfo= localtime(&time1);
+    buff->timeinfo= *localtime(&time1);
     buff->clientKey=key;
     buff->mtype=4;
     strcpy(buff->mtext,message);
@@ -67,7 +66,7 @@ void stop(int serverId){
     struct msgbuff *buff;
     buff=malloc(sizeof(struct msgbuff));
     time(&time1);
-    buff->timeinfo= localtime(&time1);
+    buff->timeinfo= *localtime(&time1);
     buff->clientKey=key;
     buff->mtype=5;
     msgsnd(serverId,buff,sizeof(struct msgbuff),0);
@@ -76,7 +75,7 @@ void stop(int serverId){
 }
 
 void handler(int signum){
-    stop(ftok(HOME,1));
+    stop(msgget(ftok(HOME,1),0));
 }
 
 void messageFromServer(){
@@ -84,20 +83,18 @@ void messageFromServer(){
     buff=malloc(sizeof(struct msgbuff));
 
     while(msgrcv(queueID,buff,sizeof(struct msgbuff),-10,IPC_NOWAIT)>=0){
-        //printf("wchodze\n");
-        fflush(stdout);
         if(buff->mtype==5){
-            stop(msgget(ftok(HOME,0),0));
-        }else{
-            //printf("siemasssdasdasdas\n");
+            printf("STOP\n");
             fflush(stdout);
-//            printf("sent at %02d:%02d:%02d from: %d text:\n%s\n",
-//                   (buff->timeinfo)->tm_hour,
-//                   (buff->timeinfo)->tm_min,
-//                   (buff->timeinfo)->tm_sec,
-//                   buff->clientKey,
-//                   buff->mtext);
-            printf("%s %d",buff->mtext,buff->clientKey);
+            msgsnd(msgget(ftok(HOME,1),0),buff,sizeof (struct msgbuff),0);
+            stop(msgget(ftok(HOME,1),0));
+        }else{
+            printf("sent at %02d:%02d:%02d from: %d text:\n%s\n",
+                   (buff->timeinfo).tm_hour,
+                   (buff->timeinfo).tm_min,
+                   (buff->timeinfo).tm_sec,
+                   buff->auxiliaryId,
+                   buff->mtext);
         }
     }
 }
@@ -110,9 +107,15 @@ int main(){
     init(serverId);
     char command[1024];
     signal(SIGINT,handler);
-    while(fgets(command,1024,stdin)){
-        printf("%s",command);
+    while(1){
         messageFromServer();
+        printf(">>");
+        fgets(command,1024,stdin);
+        if(strlen(command)>1){
+            command[strlen(command)-1]=' ';
+            command[strlen(command)]='\0';
+        }
+        printf("%s\n",command);
         char *iterator;
         iterator=strtok(command," ");
         if(strcmp(iterator,"LIST")==0){

@@ -6,4 +6,4 @@ main:
 	$(CC) -Wall -o server server.c
 	$(CC) -Wall -o client client.c
 clean:
-	rm main server client
+	rm main server client log.txt

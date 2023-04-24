@@ -12,6 +12,6 @@ struct msgbuff {
     long mtype;         /* typ komunikatu   */
     char mtext[1024];      /* tresc komunikatu */
     key_t clientKey;
-    struct tm * timeinfo;
+    struct tm timeinfo;
     int auxiliaryId;
 };

@@ -1,0 +1,6 @@
+21:33:22 INIT Client ID: 0
+21:33:24 INIT Client ID: 1
+21:33:29 2ALL Client ID:0 TEXT:dsfds
+21:33:39 2ONE Client ID:0 TO:1 TEXT:dsfdsfsd
+21:33:53 LIST Client ID: 0
+21:33:57 STOP Client ID:0
