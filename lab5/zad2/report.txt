@@ -1,12 +1,12 @@
 dx:0.0000000005 n:1
 Result: 3.141593
-Time:6 s
+Time:11 s
 
 dx:0.0000000005 n:2
 Result: 3.141592
-Time:3 s
+Time:4 s
 
 dx:0.0000000005 n:10
 Result: 3.141594
-Time:2 s
+Time:1 s
 
