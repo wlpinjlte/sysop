@@ -2,8 +2,8 @@
 
 
 int create_semaphore(char *file,int i){
-    int semid=semget(ftok(getenv("HOME"),file[0]),1,0666|IPC_CREATE);
-    if(semctl(semid, 0, SETVAL, initial) == -1) {
+    int semid=semget(ftok(getenv("HOME"),file[0]),1,0666|IPC_CREAT);
+    if(semctl(semid, 0, SETVAL, i) == -1) {
         perror("Creating a semaphore failed on semctl");
         return -1;
     }

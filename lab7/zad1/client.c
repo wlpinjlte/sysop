@@ -16,7 +16,7 @@ int semaphore_queue;
 int semaphore_barbers;
 int buffer;
 
-void open_semaphore(){
+void open_semaphore_helper(){
     semaphore_barbers= open_semaphore("1");
     semaphore_queue= open_semaphore("2");
     semaphore_chairs= open_semaphore("3");
@@ -26,11 +26,11 @@ void open_semaphore(){
 int main(){
     srand(time(NULL));
     char *memory= add_memory(HOME,BUFF_SIZE);
-    if(strlen(queue)>=QUEUE_SIZE){
+    if(strlen(memory)>=QUEUE_SIZE){
         printf("queue full\n");
         exit(0);
     }
-    open_semaphore();
+    open_semaphore_helper();
     subtract_from_semaphore(semaphore_queue);
     subtract_from_semaphore(buffer);
     char haircut=rand()%128;

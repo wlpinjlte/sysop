@@ -8,11 +8,14 @@
 #include "queue_manager.h"
 #include "share_memory.h"
 #include "semaphore_helper.h"
+#define QUEUE_SIZE 10
+#define BUFF_SIZE 1024
+#define HOME getenv("HOME")
 int semaphore_chairs;
 int semaphore_queue;
 int semaphore_barbers;
 int buffer;
-void open_semaphore(){
+void open_semaphore_helper(){
     semaphore_barbers= open_semaphore("1");
     semaphore_queue= open_semaphore("2");
     semaphore_chairs= open_semaphore("3");
@@ -20,11 +23,11 @@ void open_semaphore(){
 }
 int main(){
     char *memory= add_memory(HOME,BUFF_SIZE);
-    if(strlen(queue)>=QUEUE_SIZE){
+    if(strlen(memory)>=QUEUE_SIZE){
         printf("queue full\n");
         exit(0);
     }
-    open_semaphore();
+    open_semaphore_helper();
     printf("Barber:%d\n",getpid());
     fflush(stdout);
     while(1){
