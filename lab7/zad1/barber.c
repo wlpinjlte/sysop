@@ -24,7 +24,7 @@ void open_semaphore_helper(){
 int main(){
     char *memory= add_memory(HOME,BUFF_SIZE);
     open_semaphore_helper();
-    printf("Barber:%d\n",getpid());
+    printf("Barber:%d start\n",getpid());
     fflush(stdout);
     while(1){
         subtract_from_semaphore(semaphore_barbers);

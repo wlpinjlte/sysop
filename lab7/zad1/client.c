@@ -26,13 +26,13 @@ int main(){
     srand(getpid());
     char *memory;
     memory=add_memory(HOME,BUFF_SIZE);
-    printf("client:%d\n",getpid());
+    printf("client:%d start\n",getpid());
     fflush(stdout);
 
     open_semaphore_helper();
 //    printf("size:%d\n",semctl(semaphore_queue,0,GETVAL,0));
     if(semctl(semaphore_queue,0,GETVAL,0)==0){
-        printf("queue full\n");
+        printf("client:%d queue full\n",getpid());
         exit(0);
     }
     subtract_from_semaphore(semaphore_queue);
@@ -42,8 +42,8 @@ int main(){
     fflush(stdout);
     queue_push(memory,haircut);
     add_to_semaphore(buffer);
-    add_to_semaphore(semaphore_barbers);
     subtract_from_semaphore(semaphore_chairs);
+    add_to_semaphore(semaphore_barbers);
     printf("client:%d done\n",getpid());
     fflush(stdout);
     remove_memory(memory);

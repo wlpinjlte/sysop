@@ -8,8 +8,9 @@
 #include "queue_manager.h"
 #include "share_memory.h"
 #include "semaphore_helper.h"
-#define CHAIRS 5
-#define BARBERS 2
+#define CHAIRS 2
+#define BARBERS 3
+#define QUEUE 7
 #define CLIENTS 10
 int semaphore_chairs;
 int semaphore_queue;
@@ -18,8 +19,8 @@ int buffer;
 
 void create_semaphore_helper(){
     semaphore_barbers= create_semaphore("1",0);
-    semaphore_queue= create_semaphore("2",CHAIRS);
-    semaphore_chairs= create_semaphore("3",0);
+    semaphore_queue= create_semaphore("2",QUEUE);
+    semaphore_chairs= create_semaphore("3",CHAIRS);
     buffer= create_semaphore("4",1);
 }
 void unlink_semaphore_helper(){
@@ -31,6 +32,7 @@ void unlink_semaphore_helper(){
 int main(){
     char *memory= add_memory(HOME,1024);
     memory[0]='\0';
+    printf("simulation chairs:%d clients:%d barbers:%d queue:%d\n",CHAIRS,CLIENTS,BARBERS,QUEUE);
     unlink_semaphore_helper();
     create_semaphore_helper();
     for(int i=0;i<BARBERS;i++){

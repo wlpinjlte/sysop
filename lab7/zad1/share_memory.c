@@ -8,6 +8,9 @@
 #include <sys/shm.h>
 int get_memory(char * file,int size){
     key_t key=ftok(file,0);
+    if(key==-1){
+        return -1;
+    }
     return shmget(key,size,0666|IPC_CREAT);
 }
 
@@ -29,7 +32,15 @@ int delete_memory(char *memory){
 
 char *add_memory(char *file,int size){
     int memory_id= get_memory(file,size);
+    if(memory_id==-1){
+        printf("get memory error!\n");
+        return '\0';
+    }
     char *memory;
     memory=shmat(memory_id,NULL,0);
+    if(memory==(char*)(-1)){
+        printf("load memory problem\n");
+        return '\0';
+    }
     return memory;
 }
