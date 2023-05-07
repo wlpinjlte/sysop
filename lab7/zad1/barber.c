@@ -34,7 +34,7 @@ int main(){
 
         printf("barber:%d haircut numer:%d in progress\n",getpid(),haircut);
         fflush(stdout);
-        sleep(10);
+        sleep(haircut);
         printf("barber:%d haircut numer:%d done\n",getpid(),haircut);
         fflush(stdout);
 
@@ -48,4 +48,7 @@ int main(){
         }
     }
     printf("closing barber %d\n",getpid());
+    fflush(stdout);
+    remove_memory(memory);
+    return 0;
 }

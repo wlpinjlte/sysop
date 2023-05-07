@@ -23,21 +23,21 @@ void open_semaphore_helper(){
 }
 
 int main(){
-    srand(time(NULL));
+    srand(getpid());
     char *memory;
     memory=add_memory(HOME,BUFF_SIZE);
     printf("client:%d\n",getpid());
     fflush(stdout);
 
     open_semaphore_helper();
-    printf("size:%d\n",semctl(semaphore_queue,0,GETVAL,0));
+//    printf("size:%d\n",semctl(semaphore_queue,0,GETVAL,0));
     if(semctl(semaphore_queue,0,GETVAL,0)==0){
         printf("queue full\n");
         exit(0);
     }
     subtract_from_semaphore(semaphore_queue);
     subtract_from_semaphore(buffer);
-    char haircut=rand()%10;
+    char haircut=rand()%10+1;
     printf("client:%d haircut number %d\n",getpid(),haircut);
     fflush(stdout);
     queue_push(memory,haircut);
@@ -46,5 +46,6 @@ int main(){
     subtract_from_semaphore(semaphore_chairs);
     printf("client:%d done\n",getpid());
     fflush(stdout);
-    return 1;
+    remove_memory(memory);
+    return 0;
 }
