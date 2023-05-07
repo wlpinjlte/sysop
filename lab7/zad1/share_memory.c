@@ -6,11 +6,9 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <sys/shm.h>
-char *add_memory(char * file,int size){
-    int memory_id=shmget(ftok(file,0),size,0666|IPC_CREAT);
-    char *memory;
-    memory=shmat(memory_id,NULL,0);
-    return memory;
+int get_memory(char * file,int size){
+    key_t key=ftok(file,0);
+    return shmget(key,size,0666|IPC_CREAT);
 }
 
 int remove_memory(char *memory){
@@ -21,9 +19,17 @@ int remove_memory(char *memory){
 }
 
 int delete_memory(char *memory){
-    int memory_id=shmget(ftok(memory,0),0,0666|IPC_CREAT);
+    key_t key=ftok(memory,0);
+    int memory_id=shmget(key,0,0666|IPC_CREAT);
     if(shmctl(memory_id,IPC_RMID,NULL)==-1){
         return 0;
     }
     return 1;
+}
+
+char *add_memory(char *file,int size){
+    int memory_id= get_memory(file,size);
+    char *memory;
+    memory=shmat(memory_id,NULL,0);
+    return memory;
 }

@@ -11,5 +11,4 @@ char *add_memory(char * file,int size);
 int remove_memory(char *memory);
 int delete_memory(char *file);
 
-
 #endif //SYSOP_SHARE_MEMORY_H

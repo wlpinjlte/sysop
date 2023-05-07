@@ -8,19 +8,18 @@
 #include "queue_manager.h"
 #include "share_memory.h"
 #include "semaphore_helper.h"
-#define HOME getenv("HOME")
-#define CHAIRS 10
-#define BARBERS 5
-#define CLIENTS 20
+#define CHAIRS 5
+#define BARBERS 2
+#define CLIENTS 10
 int semaphore_chairs;
 int semaphore_queue;
 int semaphore_barbers;
 int buffer;
 
 void create_semaphore_helper(){
-    semaphore_chairs= create_semaphore("3",CHAIRS);
-    semaphore_queue= create_semaphore("2",0);
     semaphore_barbers= create_semaphore("1",0);
+    semaphore_queue= create_semaphore("2",CHAIRS);
+    semaphore_chairs= create_semaphore("3",0);
     buffer= create_semaphore("4",1);
 }
 void unlink_semaphore_helper(){

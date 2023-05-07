@@ -23,10 +23,6 @@ void open_semaphore_helper(){
 }
 int main(){
     char *memory= add_memory(HOME,BUFF_SIZE);
-    if(strlen(memory)>=QUEUE_SIZE){
-        printf("queue full\n");
-        exit(0);
-    }
     open_semaphore_helper();
     printf("Barber:%d\n",getpid());
     fflush(stdout);

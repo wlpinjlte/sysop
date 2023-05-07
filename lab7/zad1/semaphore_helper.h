@@ -7,7 +7,7 @@
 #include <fcntl.h>
 #include <semaphore.h>
 #include <stdio.h>
-
+#define HOME getenv("HOME")
 int create_semaphore(char *file,int i);
 int open_semaphore(char *file);
 void unlink_semaphore(char *file);

@@ -5,20 +5,22 @@
 
 char queue_pop(char *queue){
     if(queue_empty(queue)==1){
-        printf("ERROR:empty queue");
+        printf("ERROR:empty queue\n");
         return '\0';
     }
     char to_return=queue[0];
-    memcpy(queue,queue+1,strlen(queue)+1);
+    memcpy(queue,queue+sizeof(char),strlen(queue)+1);
     return to_return;
 }
 
 void queue_push(char *queue,char c){
     if(queue_full(queue)==1){
-        printf("ERROR: full queue");
+        printf("ERROR: full queue\n");
     }else{
-        queue[strlen(queue)-1]=c;
-        queue[strlen(queue)]='\0';
+        long len=strlen(queue);
+//        printf("char:%d",c);
+        queue[len]=c;
+        queue[len+1]='\0';
     }
 }
 
