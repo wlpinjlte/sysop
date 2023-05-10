@@ -17,7 +17,6 @@ int main(int argc,char **argv)
 	char *background = create_grid();
 	char *tmp;
     int n=atoi(argv[1]);
-    printf("%d\n",n);
 	init_grid(foreground);
     create_threads(foreground,background,n);
 	while (true)

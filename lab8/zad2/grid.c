@@ -120,7 +120,12 @@ void create_threads(char *src, char *dst,int n){
     number_of_threads=n;
     signal(SIGUSR1, handler);
     t=malloc(sizeof(pthread_t)*n);
-    int step=grid_width*grid_height;
+    int step;
+    if(grid_width*grid_height%n==0){
+        step=grid_width*grid_height/n;
+    }else{
+        step=grid_width*grid_height/n+1;
+    }
     int start=0;
     int end=step;
     for(int i=0;i<n-1;i++){
