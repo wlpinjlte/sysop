@@ -120,15 +120,15 @@ void create_threads(char *src, char *dst,int n){
     number_of_threads=n;
     signal(SIGUSR1, handler);
     t=malloc(sizeof(pthread_t)*n);
-    int step;
-    if(grid_width*grid_height%n==0){
-        step=grid_width*grid_height/n;
-    }else{
-        step=grid_width*grid_height/n+1;
-    }
+    int step=grid_width*grid_height/n+1;
     int start=0;
-    int end=step;
-    for(int i=0;i<n-1;i++){
+    int end=0;
+    int reducerStep=(grid_width*grid_height)%n;
+    for(int i=0;i<n;i++){
+        if(i==reducerStep){
+            step-=1;
+        }
+        end+=step;
         Arguments *arg=malloc(sizeof(Arguments));
         arg->start=start;
         arg->end=end;
@@ -136,14 +136,7 @@ void create_threads(char *src, char *dst,int n){
         arg->dst=dst;
         pthread_create(&t[i],NULL,thread_function,(void*)arg);
         start=end;
-        end=start+step;
     }
-    Arguments *arg=malloc(sizeof(Arguments));
-    arg->start=start;
-    arg->end=grid_width*grid_height;
-    arg->src=src;
-    arg->dst=dst;
-    pthread_create(&t[n-1],NULL,thread_function,(void*)arg);
 }
 
 void update_grid_new(char *src,char *dst){
