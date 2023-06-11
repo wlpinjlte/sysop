@@ -7,48 +7,70 @@
 #define NUMBER_OF_ELVES 10
 #define NUMBER_OF_WAITING_ELVES 3
 
-int reindeers=0;
+int reindeer=0;
 int elves=0;
 long *waiting_elves_ids;
+int counter=0;
 
 pthread_mutex_t data_access_mutex=PTHREAD_MUTEX_INITIALIZER;
+pthread_mutex_t waiting_reindeer=PTHREAD_MUTEX_INITIALIZER;
+pthread_mutex_t waiting_elves=PTHREAD_MUTEX_INITIALIZER;
+
 pthread_cond_t santa_condition=PTHREAD_COND_INITIALIZER;
+pthread_cond_t reindeer_condition=PTHREAD_COND_INITIALIZER;
+pthread_cond_t elves_condition=PTHREAD_COND_INITIALIZER;
 
 void *santa(void *arg){
     printf("Santa created\n");
-    while(1){
+    while(counter<3){
         printf("Santa go to sleep\n");
         pthread_mutex_lock(&data_access_mutex);
-        while(reindeers<NUMBER_OF_REINDEER&&elves<NUMBER_OF_WAITING_ELVES){
+        while(reindeer<NUMBER_OF_REINDEER&&elves<NUMBER_OF_WAITING_ELVES){
             pthread_cond_wait(&santa_condition,&data_access_mutex);
         }
-        printf("Santa wake up\n");
-        if(reindeers==NUMBER_OF_REINDEER){
-            reindeers=0;
-            //....
+        if(reindeer==NUMBER_OF_REINDEER){
+            printf("Santa wake up: delivering presents\n");
+//            pthread_mutex_unlock(&data_access_mutex);
+            sleep(2 + rand() % 3);
+//            pthread_mutex_lock(&data_access_mutex);
+            counter+=1;
+            reindeer=0;
+            pthread_mutex_lock(&waiting_reindeer);
+            pthread_cond_broadcast(&reindeer_condition);
+            pthread_mutex_unlock(&waiting_reindeer);
         }else if(elves==NUMBER_OF_WAITING_ELVES){
+//            pthread_mutex_unlock(&data_access_mutex);
+            sleep(1 + rand() % 2);
+//            pthread_mutex_lock(&data_access_mutex);
+            printf("Santa wake up: helping elves,%ld %ld %ld ID\n",waiting_elves_ids[0],waiting_elves_ids[1],waiting_elves_ids[2]);
             elves=0;
-            //..
+            pthread_mutex_lock(&waiting_elves);
+            pthread_cond_broadcast(&elves_condition);
+            pthread_mutex_unlock(&waiting_elves);
         }
         pthread_mutex_unlock(&data_access_mutex);
     }
+    printf("santa closing\n");
+    return NULL;
 }
 
-void *reindeer(void *arg){
+void *reindeer_thread_function(void *arg){
     printf("Reindeer number %ld created\n",pthread_self());
     while(1){
         printf("Reindeer number %ld on vaction\n",pthread_self());
         sleep(5+(rand()%6));
         pthread_mutex_lock(&data_access_mutex);
-        reindeers+=1;
-        if(reindeers==NUMBER_OF_REINDEER){
+        reindeer+=1;
+        if(reindeer==NUMBER_OF_REINDEER){
             printf("Reindeer number %ld wake up santa\n",pthread_self());
         }else{
             printf("Reindeer number %ld waiting for santa\n",pthread_self());
         }
         pthread_cond_broadcast(&santa_condition);
         pthread_mutex_unlock(&data_access_mutex);
-        //reindeer sem_wait-to do
+        pthread_mutex_lock(&waiting_reindeer);
+        pthread_cond_wait(&reindeer_condition,&waiting_reindeer);
+        pthread_mutex_unlock(&waiting_reindeer);
     }
 }
 
@@ -67,9 +89,11 @@ void *elf(void *arg){
             }
             pthread_cond_broadcast(&santa_condition);
             pthread_mutex_unlock(&data_access_mutex);
-            //elf sem_wait-to do
+            pthread_mutex_lock(&waiting_elves);
+            pthread_cond_wait(&elves_condition,&waiting_elves);
+            pthread_mutex_unlock(&waiting_elves);
         }else{
-            printf("Elf number %ld handle thing yourself\n",pthread_self());
+            printf("Elf number %ld handle thing himself\n",pthread_self());
             pthread_mutex_unlock(&data_access_mutex);
         }
     }
@@ -82,17 +106,17 @@ int main(){
     pthread_t santa_thread;
     pthread_create(&santa_thread,NULL,santa,NULL);
     for(int i=0;i<NUMBER_OF_REINDEER;i++){
-        pthread_create(&reindeers_threads[i],NULL,reindeer,NULL);
+        pthread_create(&reindeers_threads[i],NULL,reindeer_thread_function,NULL);
     }
     for(int i=0;i<NUMBER_OF_ELVES;i++){
         pthread_create(&elves_threads[i],NULL,elf,NULL);
     }
-
+    pthread_join(santa_thread,NULL);
     for(int i=0;i<NUMBER_OF_REINDEER;i++){
-        pthread_join(reindeers_threads[i],NULL);
+        pthread_cancel(reindeers_threads[i]);
     }
     for(int i=0;i<NUMBER_OF_ELVES;i++){
-        pthread_join(elves_threads[i],NULL);
+        pthread_cancel(elves_threads[i]);
     }
     return 0;
 }
