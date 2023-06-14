@@ -8,7 +8,8 @@ typedef enum{
     TO_ALL,
     GET,
     SERVER_FULL,
-
+    NAME_TAKEN,
+    PING
 } Type;
 
 typedef struct{

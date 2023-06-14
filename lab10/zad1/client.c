@@ -17,7 +17,7 @@ int unix_connect(char *path){
     memset(&addr,0,sizeof(addr));
     addr.sun_family=AF_UNIX;
     strcpy(addr.sun_path,path);
-    int socketToReturn=socekt(AF_UNIX,SOCK_STREAM,0);
+    int socketToReturn=socket(AF_UNIX,SOCK_STREAM,0);
     connect(socketToReturn,(struct sockaddr*) &addr,sizeof(addr));
     return socketToReturn;
 }
@@ -74,14 +74,12 @@ int main(int argc,char **argv){
         for(int i=0;i<n;i++){
             if(events[i].data.fd==STDIN_FILENO){
                 char buffer[512]={};
-                int x=read(STDIN_FILENO);
+                int x=read(STDIN_FILENO,&buffer,512);
                 buffer[x]=0;
 
                 char *token;
-                token=strtok(buffer,"\n");
+                token=strtok(buffer," \n");
                 Type type=-1;
-//                char receiver[SIZE]={};
-//                char content[SIZE]={};
                 Msg *msg=malloc(sizeof(Msg));
 
                 if(token==NULL){
@@ -91,19 +89,12 @@ int main(int argc,char **argv){
                     type=LIST;
                 }else if(strcmp(token,"2ALL")==0){
                     type = TO_ALL;
-                    token = strtok(NULL, "\n");
-//                    memcpy(content, token, strlen(token)*sizeof(char));
-//                    content[strlen(token)] = 0;
                     strcpy(msg->content,token);
                 }else if(strcmp(token,"2ONE")==0){
                     type=TO_ONE;
-                    token=strtok(NULL,' ');
-//                    memcpy(receiver,token,strlen(token)*sizeof(char));
-//                    reciver[strlen(token)]=0;
-                    strcpy(msg->receiver,token);
-                    token=strtok(NULL,'\n');
-//                    memcpy(content,token,strlen(token)*sizeof(char));
-//                    content[strlen(token)]=0;
+                    token=strtok(NULL," ");
+                    strcpy(msg->reciver,token);
+                    token=strtok(NULL,"\n");
                     strcpy(msg->content,token);
                 }else if(strcmp(token,"STOP")==0){
                     type=STOP;
@@ -126,11 +117,11 @@ int main(int argc,char **argv){
                     close(sock);
                     exit(0);
                 }else if(msg->type==PING){
-                    write(sock,msg,strlen(Msg));
+                    write(sock,msg,sizeof(Msg));
                 }else if(msg->type==STOP){
                     close(sock);
                     exit(0);
-                }else if(msg->type=GET){
+                }else if(msg->type==GET){
                     puts(msg->content);
                 }else if(events[i].events& EPOLLHUP){
                     puts("Disconnect");
